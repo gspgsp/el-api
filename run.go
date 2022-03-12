@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gspgsp/el-api/services"
 	"math/rand"
+	"reflect"
 	"time"
 )
 
@@ -114,4 +115,38 @@ func main() {
 	}
 
 	ech(h)
+
+	//测试接口
+
+	var hh interface{}
+	var jj = 123
+	//var kk int
+	hh = jj
+
+	//kk = hh.(int)
+
+	//switch v := hh.(type) {
+	//case int:
+	//	fmt.Println("kk is...:", v)
+	//default:
+	//	fmt.Println("kk is...:","...")
+	//}
+
+	kk := reflect.ValueOf(hh)
+
+	//再转为interface{}
+	ll := kk.Interface()
+	fmt.Println("kk is:", kk)
+
+	var vv = int64(123)
+	kk.Elem().SetInt(vv)
+	//fmt.Println("kk to string:",kk.Elem().Int())
+
+	switch v := ll.(type) {
+	case interface{}:
+		fmt.Println("ll is:", v)
+	default:
+		fmt.Println("ll is:...")
+	}
+
 }
