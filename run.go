@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gspgsp/el-api/services"
 	"math/rand"
-	"reflect"
 	"time"
 )
 
@@ -32,6 +31,27 @@ func ech(p *st) {
 	for p != nil {
 		fmt.Println("p is:", *p)
 		p = p.next
+	}
+}
+
+func write(ch chan int)  {
+	for i := 0; i < 50; i++ {
+		ch <- i
+		fmt.Println("i is:", i)
+	}
+}
+
+func read(ch chan int)  {
+	//for  {
+	//	var r int
+	//	r = <- ch
+	//
+	//	fmt.Println(" r is:", r)
+	//}
+
+	for  {
+		<- ch
+		fmt.Println(" r is:", time.Now())
 	}
 }
 
@@ -118,10 +138,10 @@ func main() {
 
 	//测试接口
 
-	var hh interface{}
-	var jj = 123
+	//var hh interface{}
+	//var jj = 123
 	//var kk int
-	hh = jj
+	//hh = jj
 
 	//kk = hh.(int)
 
@@ -132,21 +152,30 @@ func main() {
 	//	fmt.Println("kk is...:","...")
 	//}
 
-	kk := reflect.ValueOf(hh)
+	//kk := reflect.ValueOf(hh)
 
 	//再转为interface{}
-	ll := kk.Interface()
-	fmt.Println("kk is:", kk)
-
-	var vv = int64(123)
-	kk.Elem().SetInt(vv)
+	//ll := kk.Interface()
+	//fmt.Println("kk is:", kk)
+	//
+	//var vv = int64(123)
+	//kk.Elem().SetInt(vv)
 	//fmt.Println("kk to string:",kk.Elem().Int())
 
-	switch v := ll.(type) {
-	case interface{}:
-		fmt.Println("ll is:", v)
-	default:
-		fmt.Println("ll is:...")
-	}
+	//switch v := ll.(type) {
+	//case interface{}:
+	//	fmt.Println("ll is:", v)
+	//default:
+	//	fmt.Println("ll is:...")
+	//}
 
+	//channel测试
+	intChan := make(chan int)
+	go write(intChan)
+	go read(intChan)
+
+	time.Sleep(10 * time.Second)
+	defer func() {
+		fmt.Println("10 秒结束了")
+	}()
 }
