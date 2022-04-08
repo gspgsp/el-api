@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gspgsp/el-api/services"
+	"go.uber.org/zap"
+	"google.golang.org/grpc"
+	"gorm.io/gorm"
 	"math/rand"
 	"time"
 )
@@ -15,11 +18,20 @@ const (
 )
 
 var (
-	d int
-	e        = 123
-	f string = "12hello world"
-	g byte   = 'h'
+	d             int
+	e                    = 123
+	f             string = "12hello world"
+	g             byte   = 'h'
+	SugaredLogger *zap.SugaredLogger
+	s             *grpc.Server
 )
+
+type Model struct {
+	gorm.Model
+	CreatedAtText string `gorm:"-"`
+	UpdatedAtText string `gorm:"-"`
+	DeletedAtText string `gorm:"-"`
+}
 
 type st struct {
 	name string
@@ -34,14 +46,14 @@ func ech(p *st) {
 	}
 }
 
-func write(ch chan int)  {
+func write(ch chan int) {
 	for i := 0; i < 50; i++ {
 		ch <- i
 		fmt.Println("i is:", i)
 	}
 }
 
-func read(ch chan int)  {
+func read(ch chan int) {
 	//for  {
 	//	var r int
 	//	r = <- ch
@@ -49,8 +61,8 @@ func read(ch chan int)  {
 	//	fmt.Println(" r is:", r)
 	//}
 
-	for  {
-		<- ch
+	for {
+		<-ch
 		fmt.Println(" r is:", time.Now())
 	}
 }
